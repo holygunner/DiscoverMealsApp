@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/material_green50"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/ingredients_list_cardView"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        app:cardElevation="4dp"
+        style="@style/CardViewStyle">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chosen_ingredients_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center_vertical"
+            android:overScrollMode="ifContentScrolls"
+            android:scrollbars="vertical"
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
+            android:paddingBottom="80dp"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/remove_fab"
+        app:backgroundTint="@color/dark_blue"
+        app:fabSize="normal"
+        app:maxImageSize="32dp"
+        android:visibility="visible"
+        app:tint="@color/white"
+        app:srcCompat="@drawable/ic_remove_circle_floating_button"
+        style="@style/FloatingActionButtonStyle"/>
+
+</RelativeLayout>

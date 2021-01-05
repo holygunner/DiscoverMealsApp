@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                                        android:id="@+id/drawer_layout"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent">
+
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/material_green50"
+        android:id="@+id/parent_layout">
+
+        <androidx.recyclerview.widget.RecyclerView
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/ingredients_recycler_view"
+            android:splitMotionEvents="false"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_below="@id/toolbar"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            tools:context=".SelectIngredientsActivity"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/mix_button"
+            app:backgroundTint="@color/dark_blue"
+            app:fabSize="normal"
+            app:srcCompat="@drawable/ic_search_floating_button"
+            android:visibility="visible"
+            style="@style/FloatingActionButtonStyle"/>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                app:title="@string/select_ingredients"
+                style="@style/CustomToolbar"/>
+
+    </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            style="@style/CustomDrawerNavigationView"
+            app:headerLayout="@layout/navigation_menu_header"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>

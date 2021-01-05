@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_camera"
+            android:iconTint="@color/dark_green"
+            android:title="@string/menu_home" />
+
+        <item
+            android:id="@+id/nav_selected_ingr"
+            android:icon="@drawable/ic_star"
+            android:iconTint="@color/dark_green"
+            android:title="@string/chosen_ingredients" />
+
+        <item
+            android:id="@+id/nav_fav_meals"
+            android:icon="@drawable/ic_favorite"
+            android:iconTint="@color/dark_green"
+            android:title="@string/favourite_meals" />
+
+        <item
+            android:id="@+id/nav_search_meals"
+            android:icon="@drawable/ic_search"
+            android:iconTint="@color/dark_green"
+            android:title="@string/search_meal" />
+
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help"
+            android:iconTint="@color/dark_green"
+            android:title="@string/help" />
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info"
+            android:iconTint="@color/dark_green"
+            android:title="@string/about" />
+    </group>
+</menu>
