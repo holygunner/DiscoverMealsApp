@@ -14,9 +14,6 @@ public class Saver {
                 .getStringSet(key, new HashSet<String>());
     }
 
-
-    
-
     public static Set<String> readChosenIngredientsNamesInLowerCase(Context context, String key){
         Set<String> originalNames = readIngredients(context, key);
         Set<String> lowerCaseNames = new HashSet<>();
