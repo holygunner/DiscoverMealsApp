@@ -38,10 +38,9 @@ class MealRecipeFragment : BaseFragment() {
         mealViewModel = ViewModelProvider(this, viewModelFactory).get(MealRecipeViewModel::class.java)
         _binding = FragmentMealRecipeBinding.inflate(inflater, container, false)
         val view = binding.root
-        // TODO set views
         val meal : Meal? = arguments?.getParcelable(MEAL_PARCEL_KEY)
-        mealViewModel.loadData(meal!!)
-        mealViewModel.requestIsMealFav(meal)
+        mealViewModel.setMealId(meal!!.id)
+        mealViewModel.loadData(meal)
         setRecyclerView()
         observeData()
         setFavView()
@@ -71,11 +70,12 @@ class MealRecipeFragment : BaseFragment() {
     }
 
     private fun observeData() {
-        mealViewModel.mealLD.observe(viewLifecycleOwner, {
-            inflateViews(it)
-        })
-        mealViewModel.favLD.observe(viewLifecycleOwner, {
-            setLikeImageButton(it)
+        mealViewModel.provideMealsLD().observe(viewLifecycleOwner, {
+            if (it.isNotEmpty()) {
+                val meal = it.first()
+                inflateViews(meal)
+                setLikeImageButton(meal.isFav)
+            }
         })
     }
 

@@ -8,6 +8,8 @@ import com.achyzh.discovermeals2020.repository.network.BackendAPI
 import com.achyzh.discovermeals2020.repository.network.BackendApiFactory
 import dagger.Module
 import dagger.Provides
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import javax.inject.Singleton
 
 @Module
@@ -15,8 +17,9 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideDbWrapper(context: Context): DbWrapper {
-        return DbWrapper(context)
+    fun provideDbWrapper(context: Context, realm: Realm): DbWrapper {
+        Realm.init(context)
+        return DbWrapper(context, realm)
     }
 
     @Singleton
@@ -49,5 +52,15 @@ class AppModule {
         return SharedPrefSaver(context)
     }
 
-
+    @Singleton
+    @Provides
+    fun provideRealm(context: Context): Realm {
+        Realm.init(context)
+        val config = RealmConfiguration.Builder()
+            .deleteRealmIfMigrationNeeded()
+            .build()
+        Realm
+            .setDefaultConfiguration(config)
+        return Realm.getDefaultInstance()
+    }
 }

@@ -19,7 +19,7 @@ import com.achyzh.discovermeals2020.models.Meal
 import com.achyzh.discovermeals2020.repository.DbWrapper
 import com.achyzh.discovermeals2020.repository.ISaver
 import com.achyzh.discovermeals2020.ui.BaseFragment
-import com.achyzh.discovermeals2020.ui.MealsAdapterKt
+import com.achyzh.discovermeals2020.ui.MealsAdapter
 import org.jetbrains.annotations.Contract
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ class FavMealsFragment : BaseFragment() {
     private var _binding : FavouriteMealsLayoutBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel : FavMealsViewModel
-    private lateinit var adapter : MealsAdapterKt
+    private lateinit var adapter : MealsAdapter
 
     @Inject
     lateinit var dbWrapper: DbWrapper
@@ -49,13 +49,7 @@ class FavMealsFragment : BaseFragment() {
         val view = binding.root
         setupRecyclerView()
         setSwipeToRemove()
-        testReadFromDbSync()
         return view
-    }
-
-    private fun testReadFromDbSync() {
-        val favMeals = dbWrapper.getStoredFavMeals()
-        val meal: Meal? = favMeals.findFirst()
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -63,12 +57,18 @@ class FavMealsFragment : BaseFragment() {
         val recyclerView = binding.recyclerViewRoot.mealsRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val favs = saver.getAllFavMealIds()
-        adapter = MealsAdapterKt(requireActivity() as ItemSelectable<Meal>, favs)
+        adapter = MealsAdapter(requireActivity() as ItemSelectable<Meal>)
         recyclerView.adapter = adapter
-        viewModel.favMealsLD.observe(viewLifecycleOwner, {
+
+        viewModel.provideFavMealsLD().observe(viewLifecycleOwner, {
+            if (delMealPosition >= 0) {
+                adapter.onItemRemoved(delMealPosition)
+            }
             adapter.refreshData(it)
         })
     }
+
+    private var delMealPosition : Int = -1
 
     private fun setSwipeToRemove() {
         val itemTouchHelperCallback: ItemTouchHelper.SimpleCallback =
@@ -98,9 +98,8 @@ class FavMealsFragment : BaseFragment() {
                     if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.RIGHT) {
                         val position = viewHolder.adapterPosition
                         val meal = adapter.positionToMeal(position)
+                        delMealPosition = position
                         viewModel.removeMealFromFavs(meal)
-                        adapter.onItemRemoved(position)
-//                        closeIfEmpty()
                     }
                 }
 
