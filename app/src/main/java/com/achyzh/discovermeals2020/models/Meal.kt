@@ -70,11 +70,14 @@ open class Meal (
     )
     :
     RealmObject(),
-    Parcelable
+    Parcelable,
+    Cloneable
 {
     constructor() : this(id = 0)
 
     var isFav = false
+
+    var isFetchedCompletely = false
 
     @Ignore
     private var _ingredientsList: MutableList<Ingredient> = mutableListOf()
@@ -89,4 +92,15 @@ open class Meal (
             _ingredientsList = mutableListOf()
         _ingredientsList.add(ingredient)
     }
+
+//    override fun equals(other: Any?): Boolean {
+//        if (other is Meal) {
+//            return other.id.equals(this.id)
+//        }
+//        return super.equals(other)
+//    }
+
+//    override fun hashCode(): Int {
+//        return id
+//    }
 }

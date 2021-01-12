@@ -1,21 +1,23 @@
 package com.achyzh.discovermeals2020.ui.selected_ingredients
 
+import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.achyzh.discovermeals2020.business_logic.IngredientManager
 import com.achyzh.discovermeals2020.models.Ingredient
+import com.achyzh.discovermeals2020.models.UserSelection
+import com.achyzh.discovermeals2020.repository.DbWrapper
 import com.achyzh.discovermeals2020.repository.RepositoryComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import io.realm.RealmList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SelectedIngredientsViewModel @Inject constructor(
-    private val repo: RepositoryComponent
+    private val ingredientManager: IngredientManager,
+    private val dbWrapper: DbWrapper
     ) : ViewModel() {
     val ingredientsLD = MutableLiveData<List<Ingredient>>()
-    private var viewModelJob = Job()
-    private val viewModelScope = CoroutineScope(Dispatchers.IO + viewModelJob)
     val itemsToDel = hashSetOf<Ingredient>()
 
     init {
@@ -24,9 +26,21 @@ class SelectedIngredientsViewModel @Inject constructor(
 
     private fun loadData() {
         viewModelScope.launch {
-            val data : MutableList<Ingredient> =
-                repo.selectedIngredients
-            postData(data)
+            val userSelection = dbWrapper.getUserSelection()
+            userSelection.load()
+            if (!userSelection.isValid)
+                return@launch
+
+            val selectedIngredients = userSelection.selectedIngredients
+
+            val selectedIngrs = mutableListOf<Ingredient>()
+            for (name in selectedIngredients) {
+                val category: String = ingredientManager.findIngredientCategory(name)
+                val ingr = Ingredient(name = name, category = category)
+                selectedIngrs.add(ingr)
+            }
+
+            postData(selectedIngrs)
         }
     }
 
@@ -43,14 +57,21 @@ class SelectedIngredientsViewModel @Inject constructor(
                 ingredients.remove(ingr)
             }
             itemsToDel.clear()
-
-            postData(ingredients)
             storeSelected(ingredients)
+            postData(ingredients)
         }
     }
 
     private fun storeSelected(ingredients: List<Ingredient>) {
-        repo.updSelectedIngredients(ingredients)
+        viewModelScope.launch {
+            val ingrs = RealmList<String>()
+            ingrs.addAll(ingredients.map { it.name })
+            val userSelection : UserSelection = UserSelection
+                .Builder()
+                .selectedIngredients(ingrs)
+                .build();
+            dbWrapper.storeUserSelection(userSelection)
+        }
     }
 
 }

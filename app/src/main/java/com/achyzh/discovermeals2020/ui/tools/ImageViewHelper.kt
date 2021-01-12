@@ -39,10 +39,11 @@ object ImageViewHelper {
             }
         }
 
-        Picasso
-            .get()
-            .load(pictureUrl!!)
-            .into(target)
+        if (pictureUrl != null)
+            Picasso
+                .get()
+                .load(pictureUrl)
+                .into(target)
     }
 
     private fun buildAccessPath(fileName: String?, folderName: String?): String {

@@ -1,30 +1,60 @@
 package com.achyzh.discovermeals2020.ui.search
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.achyzh.discovermeals2020.models.Meal
+import com.achyzh.discovermeals2020.repository.DbWrapper
 import com.achyzh.discovermeals2020.repository.network.BackendAPI
+import com.achyzh.discovermeals2020.repository.network.BackendApiManager
 import kotlinx.coroutines.*
+import timber.log.Timber
 import javax.inject.Inject
 
-class SearchViewModel @Inject constructor() : ViewModel() {
+class SearchViewModel @Inject constructor(
+    val dbWrapper: DbWrapper,
+    private val backendApiManager: BackendApiManager
+) : ViewModel() {
     var mealsLiveData : MutableLiveData<List<Meal>> = MutableLiveData()
+    var favsMeals: MutableLiveData<Set<Meal>> = MutableLiveData()
     private val viewModelJob = Job()
-    private val viewModelScope = CoroutineScope(Dispatchers.IO + viewModelJob)
-    val backendAPI = BackendAPI
+    private val ioScope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
     fun searchData(query: String) {
         viewModelScope.launch {
-            Log.d("TAG2", "invoke search - $query")
-            val meals = backendAPI
+            Timber.d("invoke search - $query")
+            val meals = backendApiManager
                 .searchAsync(query)
                 .meals
             if (meals != null) {
-                val mealList = meals.toList()
+                val mealList = meals.toMutableList()
+                checkFavMeals(mealList)
                 mealsLiveData.postValue(mealList)
             }
         }
+    }
+
+//    val favs = liveData {
+//        val data = dbWrapper.getFavMealsAsync()
+//        emit(data)
+//    }
+
+    var favs: List<Meal> = mutableListOf()
+
+    init {
+        viewModelScope.launch {
+            favs = dbWrapper.getFavMealsAsync()
+        }
+    }
+
+    private fun checkFavMeals(mealList: List<Meal>) {
+        for (meal in mealList) {
+            for (fav in favs) {
+                meal.isFav = fav.name == meal.name
+            }
+        }
+    }
+
+    fun provideFavsLD() : LiveData<List<Meal>> {
+        return dbWrapper.getFavMealsLD()
     }
 
     fun resetSearch() {
@@ -33,6 +63,6 @@ class SearchViewModel @Inject constructor() : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        viewModelScope.cancel()
+        ioScope.cancel()
     }
 }

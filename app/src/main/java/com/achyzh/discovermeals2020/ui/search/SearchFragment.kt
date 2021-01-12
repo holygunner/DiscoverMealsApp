@@ -13,7 +13,7 @@ import com.achyzh.discovermeals2020.di.FragmentsSubcomponent
 import com.achyzh.discovermeals2020.interfaces.ItemSelectable
 import com.achyzh.discovermeals2020.models.Meal
 import com.achyzh.discovermeals2020.repository.ISaver
-import com.achyzh.discovermeals2020.ui.MealsAdapterKt
+import com.achyzh.discovermeals2020.ui.MealsAdapter
 import com.achyzh.discovermeals2020.ui.tools.DebouncingQueryTextListener
 import javax.inject.Inject
 
@@ -35,7 +35,18 @@ class SearchFragment : BaseFragment() {
         val view = binding.root
         setSearchView()
         setupRecyclerView()
+        observeFavMeals()
         return view
+    }
+
+    private fun observeFavMeals() {
+        viewModel.provideFavsLD().observe(viewLifecycleOwner, {
+            if (it.isNotEmpty()) {
+                val favSet = hashSetOf<Meal>()
+                favSet.addAll(it)
+                viewModel.favsMeals.postValue(favSet)
+            }
+        })
     }
 
     private fun setSearchView() {
@@ -65,7 +76,7 @@ class SearchFragment : BaseFragment() {
     @Suppress("UNCHECKED_CAST")
     private fun setupRecyclerView() {
         val recyclerView = binding.recyclerview
-        val adapter = MealsAdapterKt(requireActivity() as ItemSelectable<Meal>, saver.getAllFavMealIds())
+        val adapter = MealsAdapter(requireActivity() as ItemSelectable<Meal>)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         viewModel.mealsLiveData.observe(viewLifecycleOwner, {

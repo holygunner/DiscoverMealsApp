@@ -12,16 +12,24 @@ import com.achyzh.discovermeals2020.models.Meal
 import com.achyzh.discovermeals2020.business_logic.RecipeFactory
 import com.achyzh.discovermeals2020.ui.tools.ImageViewHelper
 
-class MealsAdapterKt (
-    val iSelectMeal: ItemSelectable<Meal>,
-    val favMealIds : Set<String>) :
-    RecyclerView.Adapter<MealsAdapterKt.MealsHolder>() {
+class MealsAdapter(
+    val iSelectMeal: ItemSelectable<Meal>) :
+    RecyclerView.Adapter<MealsAdapter.MealsHolder>() {
     val meals: MutableList<Meal> = mutableListOf()
-//    val favMealIds : Set<String> = Repository.saver.getAllFavMealIds()
 
     fun refreshData(meals: List<Meal>) {
         this.meals.clear()
         this.meals.addAll(meals)
+        notifyDataSetChanged()
+    }
+
+    fun refreshFavs(favs: Set<Meal>) {
+        for (meal in meals) {
+            meal.isFav = favs.contains(meal)
+            for (fav in favs) {
+                meal.isFav = fav.id == meal.id
+            }
+        }
         notifyDataSetChanged()
     }
 
@@ -66,11 +74,11 @@ class MealsAdapterKt (
         fun bind(meal: Meal, position: Int) {
             cardPageNumbTV.text = (position + 1).toString()
             this.meal = meal
-            setIsFav(meal, favMealIds.contains(meal.id.toString()))
+            setIsFav(meal)
             initIngredientsTV(meal)
         }
 
-        private fun setIsFav(meal: Meal, isFav: Boolean) {
+        private fun setIsFav(meal: Meal, isFav: Boolean = meal.isFav) {
             favView.visibility = if (isFav) View.VISIBLE else View.GONE
             mealIV.tag = ImageViewHelper.loadToImageView(mealIV, meal.urlImage)
             mealNameTV.text = meal.name

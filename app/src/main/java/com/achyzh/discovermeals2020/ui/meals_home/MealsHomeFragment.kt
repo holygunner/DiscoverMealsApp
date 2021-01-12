@@ -14,7 +14,6 @@ import com.achyzh.discovermeals2020.di.FragmentsSubcomponent
 import com.achyzh.discovermeals2020.interfaces.ItemSelectable
 import com.achyzh.discovermeals2020.models.Ingredient
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.*
 
 class MealsHomeFragment :
     BaseFragment(),
@@ -60,14 +59,11 @@ class MealsHomeFragment :
     }
 
     override fun onPause() {
+//        homeViewModel.storeSelectedIngredients(adapter.getBackCategories())
         super.onPause()
-        homeViewModel.storeSelectedIngredients(adapter.getBackCategories())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_settings) {
-            testViewModelReaction()
-        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -82,36 +78,31 @@ class MealsHomeFragment :
     }
 
     private fun goToMealsResultScreen() : Boolean {
-        val categories = adapter.getBackCategories()
-        val selectedIngredients = mutableListOf<Ingredient>()
-        for (category in categories) {
-            for (ingr in category.ingredients) {
-                if (ingr.isFill)
-                    selectedIngredients.add(ingr)
-            }
-        }
+//        val categories = adapter.getBackCategories()
+//        val selectedIngredients: MutableList<Ingredient>
+//        selectedIngredients = mutableListOf<Ingredient>()
+//        for (category in categories) {
+//            for (ingr in category.ingredients) {
+//                if (ingr.isFill)
+//                    selectedIngredients.add(ingr)
+//            }
+//        }
+
+        val selectedIngredients = homeViewModel.getSelectedIngredients()
 
         if (selectedIngredients.isEmpty())
             return false
 
-        val ingrNames = mutableListOf<String>()
-        for (ingr in selectedIngredients) {
-            ingr.name?.let { ingrNames.add(it) }
-        }
+//        val ingrNames = mutableListOf<String>()
+//        for (ingr in selectedIngredients) {
+//            ingr.name?.let { ingrNames.add(it) }
+//        }
 
-        val bundle = bundleOf(Keys.INGREDIENT_NAMES to ingrNames.toTypedArray())
+//        val bundle = bundleOf(Keys.INGREDIENT_NAMES to ingrNames.toTypedArray())
+        val bundle = bundleOf(Keys.SELECTED_INGREDIENTS to selectedIngredients)
         findNavController()
             .navigate(R.id.nav_to_meals_result_fragment, bundle)
         return true
-    }
-
-    private fun testViewModelReaction() {
-        CoroutineScope(Dispatchers.Main).launch {
-//            delay(TimeUnit.SECONDS.toMillis(1))
-//            homeViewModel.postCategories(listOf())
-//            delay(TimeUnit.SECONDS.toMillis(1))
-//            homeViewModel.loadFromAssets()
-        }
     }
 
     private fun setupRecyclerView() {
@@ -144,7 +135,6 @@ class MealsHomeFragment :
     }
 
     override fun onItemSelected(item: Ingredient) {
-//        Toast.makeText(requireContext(), "${item.name} selected", Toast.LENGTH_LONG)
-//            .show()
+        homeViewModel.storeSelectedIngredients(adapter.getBackCategories())
     }
 }

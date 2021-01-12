@@ -1,10 +1,6 @@
 package com.achyzh.discovermeals2020.models
 
-import io.realm.RealmObject
-
-data class Cuisine(var meals: Array<Meal>)
-//    : RealmObject()
-{
+data class Cuisine(var meals: Array<Meal>) {
     constructor() : this(arrayOf())
 
     override fun equals(other: Any?): Boolean {

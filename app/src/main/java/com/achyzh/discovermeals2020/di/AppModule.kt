@@ -1,13 +1,16 @@
 package com.achyzh.discovermeals2020.di
 
 import android.content.Context
-import com.achyzh.discovermeals2020.business_logic.IngredientManagerKt
+import com.achyzh.discovermeals2020.business_logic.IngredientManager
 import com.achyzh.discovermeals2020.repository.*
 import com.achyzh.discovermeals2020.repository.io.AssetsAdapter
 import com.achyzh.discovermeals2020.repository.network.BackendAPI
 import com.achyzh.discovermeals2020.repository.network.BackendApiFactory
+import com.achyzh.discovermeals2020.repository.network.BackendApiManager
 import dagger.Module
 import dagger.Provides
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import javax.inject.Singleton
 
 @Module
@@ -15,8 +18,9 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideDbWrapper(context: Context): DbWrapper {
-        return DbWrapper(context)
+    fun provideDbWrapper(context: Context, realm: Realm): DbWrapper {
+        Realm.init(context)
+        return DbWrapper(context, realm)
     }
 
     @Singleton
@@ -27,8 +31,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideIngredientManager(assetsAdapter: AssetsAdapter): IngredientManagerKt {
-        return IngredientManagerKt(assetsAdapter)
+    fun provideIngredientManager(assetsAdapter: AssetsAdapter): IngredientManager {
+        return IngredientManager(assetsAdapter)
     }
 
     @Singleton
@@ -45,9 +49,25 @@ class AppModule {
 
     @Singleton
     @Provides
+    fun provideBackendApiManager(backendAPI: BackendAPI) : BackendApiManager {
+        return BackendApiManager(backendAPI)
+    }
+
+    @Singleton
+    @Provides
     fun provideSaver(context: Context): ISaver {
         return SharedPrefSaver(context)
     }
 
-
+    @Singleton
+    @Provides
+    fun provideRealm(context: Context): Realm {
+        Realm.init(context)
+        val config = RealmConfiguration.Builder()
+            .deleteRealmIfMigrationNeeded()
+            .build()
+        Realm
+            .setDefaultConfiguration(config)
+        return Realm.getDefaultInstance()
+    }
 }

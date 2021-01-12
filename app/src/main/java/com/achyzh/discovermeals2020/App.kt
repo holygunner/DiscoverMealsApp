@@ -1,12 +1,7 @@
 package com.achyzh.discovermeals2020
 
 import android.app.Application
-import android.content.Context
-import com.achyzh.discovermeals2020.business_logic.IngredientManagerKt
 import com.achyzh.discovermeals2020.di.*
-import com.achyzh.discovermeals2020.repository.DbWrapper
-import com.achyzh.discovermeals2020.repository.io.AssetsAdapter
-import javax.inject.Inject
 
 class App : Application() {
 
