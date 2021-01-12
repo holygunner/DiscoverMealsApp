@@ -5,24 +5,22 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.achyzh.discovermeals2020._archive.discover_meals.save.Saver
-import com.achyzh.discovermeals2020.business_logic.IngredientManagerKt
+import com.achyzh.discovermeals2020.business_logic.IngredientManager
 import com.achyzh.discovermeals2020.databinding.IngredientItemV2Binding
 import com.achyzh.discovermeals2020.models.Ingredient
 import com.achyzh.discovermeals2020.ui.tools.ImageViewHelper
-import com.achyzh.discovermeals2020.ui.tools.ItemViewHelper
 import com.squareup.picasso.Picasso
 
 class IngredientsAdapter (
     val context: Context,
-    val ingredientManager: IngredientManagerKt
+    val ingredientManager: IngredientManager
     ) : RecyclerView.Adapter<IngredientsAdapter.IngredientHolder>() {
 
     val ingredients = mutableListOf<Ingredient>()
 
 
     fun refreshData(ingredients: List<Ingredient>) {
-        this.ingredients.clear();
+        this.ingredients.clear()
         this.ingredients.addAll(ingredients)
         notifyDataSetChanged()
     }
@@ -49,7 +47,7 @@ class IngredientsAdapter (
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(ingredient: Ingredient) {
-            val category: String = ingredientManager.findIngredientCategory(ingredient.name) ?: ""
+            val category: String = ingredientManager.findIngredientCategory(ingredient.name)
             val drawable: Drawable? = ingredientManager
                 .getIngredientDrawable(
                     category,
@@ -64,25 +62,13 @@ class IngredientsAdapter (
                     .into(imageView)
             }
             val text: String? =
-                if (IngredientManagerKt.verifyIngredientMeasure(ingredient.measure!!)) {
+                if (IngredientManager.verifyIngredientMeasure(ingredient.measure!!)) {
                     ingredient.name + ": " + ingredient.measure
                 } else {
                     ingredient.name
                 }
             val nameTV = binding.ingredientTextView
             nameTV.text = text
-
-            // TODO rework that
-//            val chosenIngredientNames = Saver.readChosenIngredientsNamesInLowerCase(
-//                context,
-//                Saver.CHOSEN_INGREDIENTS_KEY
-//            )
-//            if (chosenIngredientNames.contains(ingredient.name!!.toLowerCase())) {
-//                ItemViewHelper.setFillToNameTextView(
-//                    context,
-//                    nameTV, true
-//                )
-//            }
         }
     }
 }

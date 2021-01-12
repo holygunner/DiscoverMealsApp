@@ -9,12 +9,14 @@ import com.achyzh.discovermeals2020.business_logic.MealsFilter
 import com.achyzh.discovermeals2020.repository.DbWrapper
 import com.achyzh.discovermeals2020.repository.ISaver
 import com.achyzh.discovermeals2020.repository.network.BackendAPI
+import com.achyzh.discovermeals2020.repository.network.BackendApiManager
 import io.realm.RealmResults
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class MealsResultViewModel @Inject constructor(
     val saver: ISaver,
+    val backendApiManager: BackendApiManager,
     val dbWrapper: DbWrapper
     ) : ViewModel() {
     var mealsLiveData : MutableLiveData<List<Meal>> = MutableLiveData()
@@ -48,7 +50,7 @@ class MealsResultViewModel @Inject constructor(
                     } else {
                         isBackendFetchedStep = true
                         withContext(Dispatchers.IO) {
-                            BackendAPI.filterAsync(ingrName!!).meals
+                            backendApiManager.filterAsync(ingrName!!).meals
                         }
                     }
                     for (meal in meals) {

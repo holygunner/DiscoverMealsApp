@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.achyzh.discovermeals2020.values.Keys.Companion.MEAL_PARCEL_KEY
 import com.achyzh.discovermeals2020.R
-import com.achyzh.discovermeals2020.business_logic.IngredientManagerKt
+import com.achyzh.discovermeals2020.business_logic.IngredientManager
 import com.achyzh.discovermeals2020.ui.BaseFragment
 import com.achyzh.discovermeals2020.databinding.FragmentMealRecipeBinding
 import com.achyzh.discovermeals2020.models.Meal
@@ -28,7 +28,7 @@ class MealRecipeFragment : BaseFragment() {
     lateinit var ingredientsAdapter: IngredientsAdapter
 
     @Inject
-    lateinit var ingredientManager: IngredientManagerKt
+    lateinit var ingredientManager: IngredientManager
 
     override fun onCreateView(
         inflater: LayoutInflater,

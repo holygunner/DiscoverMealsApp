@@ -9,6 +9,7 @@ import com.achyzh.discovermeals2020.models.Meal
 import com.achyzh.discovermeals2020.repository.DbWrapper
 import com.achyzh.discovermeals2020.repository.ISaver
 import com.achyzh.discovermeals2020.repository.network.BackendAPI
+import com.achyzh.discovermeals2020.repository.network.BackendApiManager
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class MealRecipeViewModel @Inject constructor(
     val saver: ISaver,
     val dbWrapper: DbWrapper,
-    val backendAPI: BackendAPI
+    val backendApiManager: BackendApiManager
 ) : ViewModel() {
     private var isFav : Boolean = false
     private var mealId : Int = 0
@@ -56,7 +57,7 @@ class MealRecipeViewModel @Inject constructor(
         viewModelScope.launch {
             val meal: Meal
             withContext(Dispatchers.IO) {
-                val cuisine = BackendAPI.requestMeal(mealId)
+                val cuisine = backendApiManager.requestMeal(mealId)
                 meal = cuisine.meals[0]
                 meal.isFetchedCompletely = true
                 meal.isFav = this@MealRecipeViewModel.isFav

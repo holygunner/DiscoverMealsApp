@@ -4,23 +4,24 @@ import androidx.lifecycle.*
 import com.achyzh.discovermeals2020.models.Meal
 import com.achyzh.discovermeals2020.repository.DbWrapper
 import com.achyzh.discovermeals2020.repository.network.BackendAPI
+import com.achyzh.discovermeals2020.repository.network.BackendApiManager
 import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
-    val dbWrapper: DbWrapper
+    val dbWrapper: DbWrapper,
+    private val backendApiManager: BackendApiManager
 ) : ViewModel() {
     var mealsLiveData : MutableLiveData<List<Meal>> = MutableLiveData()
     var favsMeals: MutableLiveData<Set<Meal>> = MutableLiveData()
     private val viewModelJob = Job()
     private val ioScope = CoroutineScope(Dispatchers.IO + viewModelJob)
-    val backendAPI = BackendAPI
 
     fun searchData(query: String) {
         viewModelScope.launch {
             Timber.d("invoke search - $query")
-            val meals = backendAPI
+            val meals = backendApiManager
                 .searchAsync(query)
                 .meals
             if (meals != null) {
@@ -45,7 +46,6 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun checkFavMeals(mealList: List<Meal>) {
-//        val favs = favs.value as List<Meal>
         for (meal in mealList) {
             for (fav in favs) {
                 meal.isFav = fav.name == meal.name

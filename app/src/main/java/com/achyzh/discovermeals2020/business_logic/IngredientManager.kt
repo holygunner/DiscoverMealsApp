@@ -8,7 +8,7 @@ import com.achyzh.discovermeals2020.values.IngredientsCategories.CATEGORIES_NAME
 import java.util.*
 import javax.inject.Inject
 
-class IngredientManagerKt
+class IngredientManager
 @Inject constructor(
     private val assetsAdapter: AssetsAdapter
 ) {
@@ -20,7 +20,7 @@ class IngredientManagerKt
         }
     }
 
-    fun buildIngredientCategories(): List<IngredientsCategory>? {
+    fun buildIngredientCategories(): List<IngredientsCategory> {
         val allIngredients: MutableList<IngredientsCategory> = ArrayList()
         for (category in CATEGORIES_NAMES) {
             val ingredients: List<Ingredient>? = getIngredientsOfCategory(category)
@@ -31,7 +31,7 @@ class IngredientManagerKt
         return allIngredients
     }
 
-    fun getAllIngredientCategories(): List<IngredientsCategory>? {
+    fun getAllIngredientCategories(): List<IngredientsCategory> {
         val allIngredients: MutableList<IngredientsCategory> = ArrayList()
         for (category in CATEGORIES_NAMES) {
             val ingredients = getIngredientsOfCategory(category)
@@ -46,8 +46,8 @@ class IngredientManagerKt
         return assetsAdapter.getIngredientDrawable(folderName, fileName)
     }
 
-    fun findIngredientCategory(fileName: String?): String? {
-        return assetsAdapter.findIngredientCategory(fileName!!)
+    fun findIngredientCategory(fileName: String?): String {
+        return assetsAdapter.findIngredientCategory(fileName!!) ?: ""
     }
 
     private fun getIngredientsOfCategory(category: String): List<Ingredient>? {

@@ -1,8 +1,7 @@
 package com.achyzh.discovermeals2020.di
 
 import android.content.Context
-import com.achyzh.discovermeals2020.App
-import com.achyzh.discovermeals2020.business_logic.IngredientManagerKt
+import com.achyzh.discovermeals2020.business_logic.IngredientManager
 import com.achyzh.discovermeals2020.repository.DbWrapper
 import com.achyzh.discovermeals2020.repository.ISaver
 import com.achyzh.discovermeals2020.repository.RepositoryComponent
@@ -28,7 +27,7 @@ interface AppComponent {
     fun provideContext(): Context
     fun provideDbWrapper(): DbWrapper
     fun provideRepository(): RepositoryComponent
-    fun provideIngredientManager(): IngredientManagerKt
+    fun provideIngredientManager(): IngredientManager
     fun provideBackendAPI(): BackendAPI
     fun provideSaver(): ISaver
     fun mainActivitySubcomponent() : MainActivitySubcomponent.Factory

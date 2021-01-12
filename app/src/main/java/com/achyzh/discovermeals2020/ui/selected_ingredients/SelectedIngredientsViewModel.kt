@@ -1,8 +1,10 @@
 package com.achyzh.discovermeals2020.ui.selected_ingredients
 
+import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.achyzh.discovermeals2020.business_logic.IngredientManager
 import com.achyzh.discovermeals2020.models.Ingredient
 import com.achyzh.discovermeals2020.models.UserSelection
 import com.achyzh.discovermeals2020.repository.DbWrapper
@@ -12,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SelectedIngredientsViewModel @Inject constructor(
-    private val repo: RepositoryComponent,
+    private val ingredientManager: IngredientManager,
     private val dbWrapper: DbWrapper
     ) : ViewModel() {
     val ingredientsLD = MutableLiveData<List<Ingredient>>()
@@ -30,7 +32,15 @@ class SelectedIngredientsViewModel @Inject constructor(
                 return@launch
 
             val selectedIngredients = userSelection.selectedIngredients
-            postData(selectedIngredients)
+
+            val selectedIngrs = mutableListOf<Ingredient>()
+            for (name in selectedIngredients) {
+                val category: String = ingredientManager.findIngredientCategory(name)
+                val ingr = Ingredient(name = name, category = category)
+                selectedIngrs.add(ingr)
+            }
+
+            postData(selectedIngrs)
         }
     }
 
@@ -54,8 +64,8 @@ class SelectedIngredientsViewModel @Inject constructor(
 
     private fun storeSelected(ingredients: List<Ingredient>) {
         viewModelScope.launch {
-            val ingrs = RealmList<Ingredient>()
-            ingrs.addAll(ingredients)
+            val ingrs = RealmList<String>()
+            ingrs.addAll(ingredients.map { it.name })
             val userSelection : UserSelection = UserSelection
                 .Builder()
                 .selectedIngredients(ingrs)

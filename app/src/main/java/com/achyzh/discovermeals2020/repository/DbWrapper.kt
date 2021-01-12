@@ -27,15 +27,11 @@ class DbWrapper @Inject constructor(
     val realm: Realm
 ) {
 
-    suspend fun storeMeal0(meal: Meal) {
-        realm.executeTransactionAwait {
-            it.insertOrUpdate(meal)
-        }
-    }
-
     suspend fun storeUserSelection(userSelection: UserSelection) {
         realm.executeTransactionAwait {
-            it.insertOrUpdate(userSelection)
+            if (userSelection.isValid) {
+                it.insertOrUpdate(userSelection)
+            }
         }
     }
 
@@ -44,10 +40,11 @@ class DbWrapper @Inject constructor(
             .findFirstAsync()
     }
 
-    suspend fun getUserSelectionFlow(): Flow<UserSelection> {
-        return realm.where(UserSelection::class.java)
-            .findFirstAsync()
-            .toFlow()
+    suspend fun getFilledIngredients(): List<Ingredient> {
+        return realm
+            .where<Ingredient>()
+            .equalTo("isFill", true)
+            .findAllAsync()
     }
 
     suspend fun copyOrUpdateMeal2(meal: Meal, isFav: Boolean = false) {

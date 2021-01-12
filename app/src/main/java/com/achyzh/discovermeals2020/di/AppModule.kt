@@ -1,11 +1,12 @@
 package com.achyzh.discovermeals2020.di
 
 import android.content.Context
-import com.achyzh.discovermeals2020.business_logic.IngredientManagerKt
+import com.achyzh.discovermeals2020.business_logic.IngredientManager
 import com.achyzh.discovermeals2020.repository.*
 import com.achyzh.discovermeals2020.repository.io.AssetsAdapter
 import com.achyzh.discovermeals2020.repository.network.BackendAPI
 import com.achyzh.discovermeals2020.repository.network.BackendApiFactory
+import com.achyzh.discovermeals2020.repository.network.BackendApiManager
 import dagger.Module
 import dagger.Provides
 import io.realm.Realm
@@ -30,8 +31,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideIngredientManager(assetsAdapter: AssetsAdapter): IngredientManagerKt {
-        return IngredientManagerKt(assetsAdapter)
+    fun provideIngredientManager(assetsAdapter: AssetsAdapter): IngredientManager {
+        return IngredientManager(assetsAdapter)
     }
 
     @Singleton
@@ -44,6 +45,12 @@ class AppModule {
     @Provides
     fun provideBackendAPI(): BackendAPI {
         return BackendApiFactory.create()
+    }
+
+    @Singleton
+    @Provides
+    fun provideBackendApiManager(backendAPI: BackendAPI) : BackendApiManager {
+        return BackendApiManager(backendAPI)
     }
 
     @Singleton
