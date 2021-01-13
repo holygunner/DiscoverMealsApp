@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.achyzh.discovermeals2020.business_logic.RecipeFactory
+import com.achyzh.discovermeals2020.models.Cuisine
 import com.achyzh.discovermeals2020.models.Meal
 import com.achyzh.discovermeals2020.repository.DbWrapper
 import com.achyzh.discovermeals2020.repository.ISaver
@@ -55,14 +56,16 @@ class MealRecipeViewModel @Inject constructor(
 
     private fun requestMealAsync(mealId: Int) {
         viewModelScope.launch {
-            val meal: Meal
+            var meal: Meal? = null
             withContext(Dispatchers.IO) {
-                val cuisine = backendApiManager.requestMeal(mealId)
-                meal = cuisine.meals[0]
-                meal.isFetchedCompletely = true
-                meal.isFav = this@MealRecipeViewModel.isFav
+                val cuisine: Cuisine? = backendApiManager.requestMeal(mealId)
+                cuisine?.let {
+                    meal = cuisine.meals[0]
+                    meal!!.isFetchedCompletely = true
+                    meal!!.isFav = this@MealRecipeViewModel.isFav
+                }
             }
-            storeFetchedMeal(meal)
+            meal?.let { storeFetchedMeal(it) }
         }
     }
 

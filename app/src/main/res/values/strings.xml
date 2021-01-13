@@ -82,4 +82,5 @@
     <string name="enter_meal_name">Enter meal name</string>
     <string name="demo_data_reload">Demo data reload</string>
     <string translatable="false" name="arg1">arg1</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</string>
 </resources>

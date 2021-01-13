@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="match_parent"
+<FrameLayout
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/parent_layout"
-    android:background="@color/material_green50"
-    android:orientation="vertical"
+    android:background="@color/light_grey"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <include
         android:id="@+id/recycler_view_root"
         layout="@layout/meals_recycler_view"/>
 
-    <TextView
-        android:id="@+id/bottom_textView"
-        android:text="@string/swipe_to_remove"
-        android:layout_width="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        style="@style/FavMealsBottomTextView"/>
-
-</RelativeLayout>
+</FrameLayout>

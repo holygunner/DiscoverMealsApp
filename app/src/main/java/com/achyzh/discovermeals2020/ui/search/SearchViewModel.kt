@@ -23,7 +23,7 @@ class SearchViewModel @Inject constructor(
             Timber.d("invoke search - $query")
             val meals = backendApiManager
                 .searchAsync(query)
-                .meals
+                ?.meals
             if (meals != null) {
                 val mealList = meals.toMutableList()
                 checkFavMeals(mealList)

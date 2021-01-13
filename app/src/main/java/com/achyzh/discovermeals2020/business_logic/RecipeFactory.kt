@@ -108,7 +108,7 @@ object RecipeFactory {
         val list : MutableList<Ingredient> = mutableListOf()
         var indx = 0
         for (ingrName in ingredients) {
-            if (ingrName != null && measures[indx] != null) {
+            if (ingrName != null && ingrName.isNotBlank() && measures[indx] != null) {
                 val ingr = Ingredient(name = ingrName, measure = measures[indx])
                 list.add(ingr)
             }

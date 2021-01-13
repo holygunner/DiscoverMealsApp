@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class MealsResultViewModel @Inject constructor(
     val saver: ISaver,
-    val backendApiManager: BackendApiManager,
+    private val backendApiManager: BackendApiManager,
     val dbWrapper: DbWrapper
     ) : ViewModel() {
     var mealsLiveData : MutableLiveData<List<Meal>> = MutableLiveData()
@@ -59,11 +59,12 @@ class MealsResultViewModel @Inject constructor(
                     if (meals.isNotEmpty())
                         storeIngrsWithAssociatedMeals(ingr, meals.toList())
 
-
-                    addMeals(meals.toMutableList())
                     indx += 1
                     val progress = indx < ingredients.size
                     updProgress(progress)
+
+                    addMeals(meals.toMutableList())
+
                     if (!progress)
                         startLoad = false
                     if (isBackendFetchedStep)
@@ -71,6 +72,13 @@ class MealsResultViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun isDataLoadAlready() : Boolean {
+        return if (progressLiveData != null && progressLiveData.value != null)
+            progressLiveData.value!!
+        else
+            false
     }
 
     private fun updProgress(isOnProgress: Boolean) {

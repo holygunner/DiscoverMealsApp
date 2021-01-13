@@ -1,4 +1,4 @@
-package com.achyzh.discovermeals2020.repository.io
+package com.achyzh.discovermeals2020.repository.assets_res
 
 import android.content.Context
 import android.graphics.drawable.Drawable

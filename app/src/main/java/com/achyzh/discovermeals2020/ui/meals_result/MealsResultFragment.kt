@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.achyzh.discovermeals2020.values.Keys
 import com.achyzh.discovermeals2020.ui.BaseFragment
@@ -15,6 +16,8 @@ import com.achyzh.discovermeals2020.interfaces.ItemSelectable
 import com.achyzh.discovermeals2020.models.Ingredient
 import com.achyzh.discovermeals2020.models.Meal
 import com.achyzh.discovermeals2020.ui.MealsAdapter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MealsResultFragment : BaseFragment() {
     private var _binding : FragmentMealsResultBinding? = null
@@ -47,17 +50,25 @@ class MealsResultFragment : BaseFragment() {
         val adapter = MealsAdapter(requireActivity() as ItemSelectable<Meal>)
         recyclerView.adapter = adapter
         viewModel.mealsLiveData.observe(viewLifecycleOwner, { meals ->
-            adapter.refreshData(meals)
+//            lifecycleScope.launch {
+//                delay(2000)
+//            }
+
+            if (!(viewModel.isDataLoadAlready())) {
+                adapter.refreshData(meals)
+            }
         })
     }
 
     private fun observeProgress() {
-        val progressView = binding.progressView
+        val shimmer = binding.shimmerViewContainer
         viewModel.progressLiveData.observe(viewLifecycleOwner, { isOnProgress ->
-            if (isOnProgress)
-                progressView.visibility = View.VISIBLE
-            else
-                progressView.visibility = View.GONE
+            if (isOnProgress) {
+                shimmer.startShimmer()
+            } else {
+                shimmer.hideShimmer()
+                shimmer.visibility = View.GONE
+            }
         })
     }
 

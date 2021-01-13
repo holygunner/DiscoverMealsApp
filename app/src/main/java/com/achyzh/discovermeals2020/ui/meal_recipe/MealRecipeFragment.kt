@@ -1,27 +1,33 @@
 package com.achyzh.discovermeals2020.ui.meal_recipe
 
+import android.animation.ObjectAnimator
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.achyzh.discovermeals2020.values.Keys.Companion.MEAL_PARCEL_KEY
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.achyzh.discovermeals2020.R
 import com.achyzh.discovermeals2020.business_logic.IngredientManager
-import com.achyzh.discovermeals2020.ui.BaseFragment
-import com.achyzh.discovermeals2020.databinding.FragmentMealRecipeBinding
-import com.achyzh.discovermeals2020.models.Meal
 import com.achyzh.discovermeals2020.business_logic.RecipeFactory
+import com.achyzh.discovermeals2020.databinding.FragmentMealRecipeV2Binding
 import com.achyzh.discovermeals2020.di.FragmentsSubcomponent
+import com.achyzh.discovermeals2020.models.Meal
+import com.achyzh.discovermeals2020.ui.BaseFragment
 import com.achyzh.discovermeals2020.ui.tools.ImageViewHelper
 import com.achyzh.discovermeals2020.ui.tools.ItemViewHelper
+import com.achyzh.discovermeals2020.values.Keys.Companion.MEAL_PARCEL_KEY
 import javax.inject.Inject
 
+
 class MealRecipeFragment : BaseFragment() {
-    private var _binding : FragmentMealRecipeBinding? = null
+    private var _binding : FragmentMealRecipeV2Binding? = null
     private val binding get() = _binding!!
     private lateinit var mealViewModel: MealRecipeViewModel
 
@@ -36,7 +42,7 @@ class MealRecipeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         mealViewModel = ViewModelProvider(this, viewModelFactory).get(MealRecipeViewModel::class.java)
-        _binding = FragmentMealRecipeBinding.inflate(inflater, container, false)
+        _binding = FragmentMealRecipeV2Binding.inflate(inflater, container, false)
         val view = binding.root
         val meal : Meal? = arguments?.getParcelable(MEAL_PARCEL_KEY)
         mealViewModel.setMealId(meal!!.id)
@@ -44,6 +50,7 @@ class MealRecipeFragment : BaseFragment() {
         setRecyclerView()
         observeData()
         setFavView()
+        setExpandableRecipeTV()
         return view
     }
 
@@ -62,9 +69,54 @@ class MealRecipeFragment : BaseFragment() {
         }
     }
 
+    private var expandable = false
+    private var expand = false
+    private val recipeCollapsedMaxLines = 16
+
+    private fun setExpandableRecipeTV() {
+        val recipeTV = binding.recipeTextView
+        recipeTV.viewTreeObserver.addOnGlobalLayoutListener {
+            if (expandable) {
+                expandable = false
+                if (recipeTV.lineCount > 8) {
+                    val animation = ObjectAnimator.ofInt(recipeTV, "maxLines", recipeCollapsedMaxLines)
+                    animation.setDuration(0).start()
+                }
+            }
+        }
+
+        recipeTV.setOnClickListener {
+            if (!expand) {
+                expand = true
+                val animation = ObjectAnimator.ofInt(recipeTV, "maxLines", recipeTV.lineCount)
+                animation.setDuration(150).start()
+            } else {
+                expand = false
+                val animation = ObjectAnimator.ofInt(recipeTV, "maxLines", recipeCollapsedMaxLines)
+                animation.setDuration(150).start()
+            }
+        }
+    }
+
     private fun setRecyclerView() {
         val recyclerView = binding.mealIngredientsRecyclerGridView
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), calcSpanCount())
+        val orientation = requireContext().resources.configuration.orientation
+
+        val manager: RecyclerView.LayoutManager
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            manager = GridLayoutManager(
+                context, ItemViewHelper.calculateNumbOfColumns(requireContext()),
+                GridLayoutManager.HORIZONTAL,
+                false)
+            if (recyclerView.onFlingListener == null) {
+                val linearSnapHelper = LinearSnapHelper()
+                linearSnapHelper.attachToRecyclerView(recyclerView)
+            }
+        } else {
+            manager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
+        recyclerView.layoutManager = manager
+
         ingredientsAdapter = IngredientsAdapter(requireContext(), ingredientManager)
         recyclerView.adapter = ingredientsAdapter
     }
@@ -80,26 +132,17 @@ class MealRecipeFragment : BaseFragment() {
     }
 
     private fun inflateViews(meal: Meal) {
-        binding.recipeCardView.visibility = VISIBLE
         binding.favImageButton.visibility = VISIBLE
         ImageViewHelper.loadToImageView(binding.mealImageView, meal.urlImage)
         binding.mealNameTextView.text = meal.name
+
+        val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
+        toolbar.title = meal.name
+
         binding.recipeTextView.text = meal.instruction
 
         val ingredientList = RecipeFactory.buildIngredientList(meal)
-        if (ingredientList.isNotEmpty())
-            binding.ingredientsListCardView.visibility = VISIBLE
         ingredientsAdapter.refreshData(ingredientList)
-    }
-
-    private fun calcSpanCount(): Int {
-        val orientation = resources.configuration.orientation
-        var spanCount = 2
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            spanCount = ItemViewHelper
-                .calculateNumbOfColumns(requireContext())
-        }
-        return spanCount
     }
 
     override fun inject(fragmentsSubcomponent: FragmentsSubcomponent) {
