@@ -12,11 +12,11 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.achyzh.discovermeals2020"
+        applicationId "com.holygunner.discover_meals"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "2.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
