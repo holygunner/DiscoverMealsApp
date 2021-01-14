@@ -1,5 +1,7 @@
 package com.holygunner.discovermeals.ui
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,8 @@ import com.holygunner.discovermeals.interfaces.ItemSelectable
 import com.holygunner.discovermeals.models.Meal
 import com.holygunner.discovermeals.business_logic.RecipeFactory
 import com.holygunner.discovermeals.ui.tools.ImageViewHelper
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 
 class MealsAdapter(
     val iSelectMeal: ItemSelectable<Meal>) :
@@ -66,6 +70,24 @@ class MealsAdapter(
         private val favView: View = binding.isMealLikedContainer
         private var meal: Meal? = null
 
+        val target = object : Target {
+            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                if (bitmap != null) {
+                    val roundedBitmap = ImageViewHelper.createRoundedBitmap(bitmap)
+                    mealIV.setImageBitmap(roundedBitmap)
+                }
+            }
+
+            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                e?.printStackTrace()
+            }
+
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                if (placeHolderDrawable != null)
+                    mealIV.setImageDrawable(placeHolderDrawable)
+            }
+        }
+
         init {
             val itemView = binding.root
             itemView.setOnClickListener(this)
@@ -75,13 +97,14 @@ class MealsAdapter(
             cardPageNumbTV.text = (position + 1).toString()
             this.meal = meal
             setIsFav(meal)
+//            ImageViewHelper.loadToImageView(mealIV, meal.urlImage)
+            ImageViewHelper.loadToImageView(target, meal.urlImage)
+            mealNameTV.text = meal.name
             initIngredientsTV(meal)
         }
 
         private fun setIsFav(meal: Meal, isFav: Boolean = meal.isFav) {
             favView.visibility = if (isFav) View.VISIBLE else View.GONE
-            mealIV.tag = ImageViewHelper.loadToImageView(mealIV, meal.urlImage)
-            mealNameTV.text = meal.name
         }
 
         private fun initIngredientsTV(meal: Meal) {

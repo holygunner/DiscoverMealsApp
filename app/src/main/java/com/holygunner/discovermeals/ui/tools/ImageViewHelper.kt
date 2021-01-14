@@ -7,17 +7,28 @@ import com.holygunner.discovermeals.models.Ingredient
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Picasso.LoadedFrom
 import com.squareup.picasso.Target
+import com.squareup.picasso.Transformation
+
 
 object ImageViewHelper {
     private const val RATIO = 32f
 
-    fun bindIngredientWithImageView(imageView: ImageView, ingredient : Ingredient) {
+    fun bindIngredientWithImageView(imageView: ImageView, ingredient: Ingredient) {
         val path = buildAccessPath(ingredient.name, ingredient.category)
         Picasso.get()
             .load(path)
             .priority(Picasso.Priority.HIGH)
             //                .resize(175, 175)
             .into(imageView)
+    }
+
+    fun loadToImageView(target: Target, pictureUrl: String?) {
+        if (pictureUrl != null)
+            Picasso
+                .get()
+                .load(pictureUrl)
+                .priority(Picasso.Priority.HIGH)
+                .into(target)
     }
 
     fun loadToImageView(imageView: ImageView, pictureUrl: String?) {
@@ -43,6 +54,7 @@ object ImageViewHelper {
             Picasso
                 .get()
                 .load(pictureUrl)
+                .priority(Picasso.Priority.HIGH)
                 .into(target)
     }
 
@@ -54,7 +66,7 @@ object ImageViewHelper {
         return "https://www.themealdb.com/images/ingredients/$name.png"
     }
 
-    private fun createRoundedBitmap(bitmap: Bitmap) : Bitmap {
+    fun createRoundedBitmap(bitmap: Bitmap) : Bitmap {
         val outBitmap = Bitmap.createBitmap(
             bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888
         )

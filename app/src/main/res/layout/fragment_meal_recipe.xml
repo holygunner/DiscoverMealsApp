@@ -19,7 +19,6 @@
             android:id="@+id/main.collapsing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="@color/light_grey"
             app:layout_scrollFlags="scroll|snap"
             android:fitsSystemWindows="true"
             app:expandedTitleMarginStart="48dp"
@@ -27,7 +26,6 @@
 
             <ImageView
                 android:id="@+id/meal_imageView"
-                android:src="@color/light_grey"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"

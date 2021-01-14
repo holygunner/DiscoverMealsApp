@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_width="10dp"
             android:layout_gravity="end"
-            android:layout_margin="4dp"
+            android:layout_margin="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="SmallSp"/>
