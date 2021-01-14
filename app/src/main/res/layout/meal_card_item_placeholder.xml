@@ -6,7 +6,7 @@
     android:id="@+id/meal_CardView"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:elevation="4dp"
+    android:elevation="0dp"
     style="@style/CardViewStyle">
 
     <androidx.constraintlayout.widget.ConstraintLayout

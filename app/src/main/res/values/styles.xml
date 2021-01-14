@@ -90,6 +90,7 @@
         <item name="cardBackgroundColor">@color/white</item>
         <item name="cardUseCompatPadding">true</item>
         <item name="cardCornerRadius">8dp</item>
+        <item name="android:layout_marginBottom">-6dp</item>
     </style>
 
     <style name="HelpCardHeader">
@@ -140,10 +141,10 @@
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="Delimeter">
+    <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">@android:color/darker_gray</item>
     </style>
 
 </resources>

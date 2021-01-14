@@ -8,8 +8,8 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.achyzh.discovermeals2020.ui.meals_home.MealsHomeFragment"
-        android:label="@string/menu_home"
+        android:name="com.holygunner.discovermeals.ui.meals_home.MealsHomeFragment"
+        android:label="@string/select_ingredients"
         tools:layout="@layout/fragment_meals_home">
 
         <argument
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/meal_recipe"
-        android:name="com.achyzh.discovermeals2020.ui.meal_recipe.MealRecipeFragment"
+        android:name="com.holygunner.discovermeals.ui.meal_recipe.MealRecipeFragment"
         android:label="@string/meal_recipe"
         tools:layout="@layout/fragment_meal_recipe">
 
@@ -38,37 +38,37 @@
 
     <fragment
         android:id="@+id/nav_meals_res"
-        android:name="com.achyzh.discovermeals2020.ui.meals_result.MealsResultFragment"
+        android:name="com.holygunner.discovermeals.ui.meals_result.MealsResultFragment"
         android:label="Meals result"
         tools:layout="@layout/fragment_meals_result" />
 
     <fragment
         android:id="@+id/nav_search_meals"
-        android:name="com.achyzh.discovermeals2020.ui.search.SearchFragment"
+        android:name="com.holygunner.discovermeals.ui.search.SearchFragment"
         android:label="@string/search_meal"
         tools:layout="@layout/fragment_search_meals" />
 
     <fragment
         android:id="@+id/nav_fav_meals"
-        android:name="com.achyzh.discovermeals2020.ui.fav_meals.FavMealsFragment"
+        android:name="com.holygunner.discovermeals.ui.fav_meals.FavMealsFragment"
         android:label="@string/favourite_meals"
         tools:layout="@layout/favourite_meals_layout" />
 
     <fragment
         android:id="@+id/nav_selected_ingr"
-        android:name="com.achyzh.discovermeals2020.ui.selected_ingredients.SelectedIngredientsFragment"
+        android:name="com.holygunner.discovermeals.ui.selected_ingredients.SelectedIngredientsFragment"
         android:label="@string/chosen_ingredients"
         tools:layout="@layout/chosen_ingredients_layout" />
 
     <fragment
         android:id="@+id/nav_about"
-        android:name="com.achyzh.discovermeals2020.ui.about.AboutFragment"
+        android:name="com.holygunner.discovermeals.ui.about.AboutFragment"
         android:label="@string/about"
         tools:layout="@layout/about_layout" />
 
     <fragment
         android:id="@+id/nav_help"
-        android:name="com.achyzh.discovermeals2020.ui.about.HelpFragment"
+        android:name="com.holygunner.discovermeals.ui.about.HelpFragment"
         android:label="@string/help"
         tools:layout="@layout/fragment_help" />
 
