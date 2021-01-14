@@ -10,9 +10,14 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="windowActionBar">false</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="ToolbarColoredIcon" parent="Theme.DiscoverMeals2020">
+        <item name="android:textColorSecondary">@color/text_color</item>
     </style>
 
 <!--    &lt;!&ndash; Original theme to test default functionality. &ndash;&gt;-->

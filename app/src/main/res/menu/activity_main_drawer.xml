@@ -8,7 +8,7 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_camera"
             android:iconTint="@color/dark_green"
-            android:title="@string/menu_home" />
+            android:title="@string/select_ingredients" />
 
         <item
             android:id="@+id/nav_selected_ingr"

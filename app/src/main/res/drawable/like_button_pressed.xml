@@ -5,7 +5,7 @@
     <item>
         <shape
             xmlns:android="http://schemas.android.com/apk/res/android">
-            <solid android:color="@color/material_grey50" />
+            <solid android:color="@color/material_grey50_transparent" />
             <corners android:radius="4dp" />
         </shape>
 
