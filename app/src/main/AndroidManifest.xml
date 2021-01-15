@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.holygunner.discovermeals">
+    package="com.holygunner.discover_meals">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.holygunner.discovermeals.App"
+        android:name="com.holygunner.discover_meals.App"
         android:allowBackup="true"
         tools:replace="android:allowBackup"
         android:icon="@mipmap/icon"
@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DiscoverMeals2020">
         <activity
-            android:name="com.holygunner.discovermeals.MainActivity"
+            android:name="com.holygunner.discover_meals.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.DiscoverMeals2020.NoActionBar">
             <intent-filter>
