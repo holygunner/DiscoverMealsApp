@@ -1,4 +1,3 @@
-Discover Meals
 That is a fully Kotlin remake of my old same app:
 
 https://play.google.com/store/apps/details?id=com.holygunner.discover_meals
