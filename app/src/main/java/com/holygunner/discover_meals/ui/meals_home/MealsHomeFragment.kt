@@ -1,11 +1,14 @@
 package com.holygunner.discover_meals.ui.meals_home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.*
 import com.holygunner.discover_meals.values.Keys
 import com.holygunner.discover_meals.R
 import com.holygunner.discover_meals.ui.BaseFragment
@@ -14,6 +17,9 @@ import com.holygunner.discover_meals.di.FragmentsSubcomponent
 import com.holygunner.discover_meals.interfaces.ItemSelectable
 import com.holygunner.discover_meals.models.Ingredient
 import com.google.android.material.snackbar.Snackbar
+import com.holygunner.discover_meals.experimantal.TestWorker
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class MealsHomeFragment :
     BaseFragment(),
@@ -69,12 +75,54 @@ class MealsHomeFragment :
 
     private fun setFab() {
         binding.fab.setOnClickListener {
-            val result = goToMealsResultScreen()
-            if (!result) {
-                Snackbar.make(it, R.string.no_chosen_ingredients, Snackbar.LENGTH_LONG).show()
-            }
+//            val result = goToMealsResultScreen()
+//            if (!result) {
+//                Snackbar.make(it, R.string.no_chosen_ingredients, Snackbar.LENGTH_LONG).show()
+//            }
 
+            testWorkManager()
         }
+    }
+
+    private fun testWorkManager() {
+        val context = requireContext().applicationContext
+        val workName = "my unique work"
+        val passedData: Data = workDataOf(TestWorker.INPUT_1_KEY to "passed value sample")
+        val testWorkRequest: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<TestWorker>()
+                .setInputData(passedData)
+                .setInitialDelay(2, TimeUnit.SECONDS)
+                .build()
+        WorkManager
+            .getInstance(context)
+//            .enqueue(testWorkRequest)
+            .enqueueUniqueWork(
+                workName,
+                ExistingWorkPolicy.KEEP,
+                testWorkRequest
+            )
+
+        // observe work result by name
+//        WorkManager.getInstance(context)
+//            .getWorkInfosForUniqueWorkLiveData(workName)
+//            .observe(viewLifecycleOwner, { infoList ->
+//                for (info : WorkInfo in infoList) {
+//
+//                }
+//            })
+
+        // observe work result by id
+        WorkManager.getInstance(context)
+            .getWorkInfoByIdLiveData(testWorkRequest.id)
+            .observe(viewLifecycleOwner, { info ->
+                if (info != null && info.state.isFinished) {
+                    val workResult = info.outputData.getString(
+                        TestWorker.OUTPUT_1_KEY
+                    )
+                    // ... do something with the result ...
+                    Timber.d("workResult -> $workResult")
+                }
+            })
     }
 
     private fun goToMealsResultScreen() : Boolean {

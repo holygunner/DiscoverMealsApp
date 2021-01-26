@@ -86,4 +86,8 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
     // Layouts
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    // Work Manager | Kotlin + coroutines
+    implementation "androidx.work:work-runtime-ktx:2.4.0"
+    // Work Manager | optional - Test helpers
+    androidTestImplementation "androidx.work:work-testing:2.4.0"
 }
