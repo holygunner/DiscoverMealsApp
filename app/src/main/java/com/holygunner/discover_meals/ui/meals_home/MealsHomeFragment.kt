@@ -75,12 +75,10 @@ class MealsHomeFragment :
 
     private fun setFab() {
         binding.fab.setOnClickListener {
-//            val result = goToMealsResultScreen()
-//            if (!result) {
-//                Snackbar.make(it, R.string.no_chosen_ingredients, Snackbar.LENGTH_LONG).show()
-//            }
-
-            testWorkManager()
+            val result = goToMealsResultScreen()
+            if (!result) {
+                Snackbar.make(it, R.string.no_chosen_ingredients, Snackbar.LENGTH_LONG).show()
+            }
         }
     }
 
